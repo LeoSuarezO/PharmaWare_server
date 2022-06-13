@@ -1,26 +1,12 @@
-const express = require('express');
-const port = 3000;
+const express = require("express");
 const app = express();
+const db = require("./database")
 const bodyparser = require('body-parser');
+
+app.set("port", process.env.port || 3000);
 
 var jsonParser = bodyparser.json()
 var urlencodedParser = bodyparser.urlencoded({ extended: false })
-
-const mysql = require("mysql2");
-const connection = mysql.createConnection({
-  host: "bkr8uzegu9z4k52mgvt3-mysql.services.clever-cloud.com",
-  user: "u24sbkla20yreep0",
-  password: "mW8vDttJLo7NGu4oy6nZ",
-  database: "bkr8uzegu9z4k52mgvt3",
-  uri: "mysql://u24sbkla20yreep0:mW8vDttJLo7NGu4oy6nZ@bkr8uzegu9z4k52mgvt3-mysql.services.clever-cloud.com:3306/bkr8uzegu9z4k52mgvt3"
-});
-
-// Chek connect.
-connection.connect((error) => {
-  if (error) throw error;
-  console.log("Database server running...");
-});
-
 
 app.get('/products', (req, res) => {
   connection.query('select * from PRODUCTOS', (error, results) => {
@@ -65,4 +51,4 @@ app.post('/createProduct', jsonParser, function(req, res) {
 //   console.log(body)
 // })
 
-app.listen(port, () => console.log(`Server running on port ${port}...`));
+module.exports = app
