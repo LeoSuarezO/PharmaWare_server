@@ -13,7 +13,7 @@ export const createUser = async (req, res) => {
 
 export const findUser = async (req, res) => {
   const result = await db.query("SELECT * FROM USUARIOS WHERE nombre = ?", [
-    req.body.name,
+    req.body.username,
   ]);
   const foundUser = result[0];
   if (!foundUser) {
