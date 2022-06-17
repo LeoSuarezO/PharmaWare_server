@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const db = require("./database");
-const bodyparser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors"); 
+const bcrypt = require("bcrypt")
 
 app.set("port", process.env.port || 3000);
 
@@ -50,8 +50,13 @@ app.post("/createProduct", function (req, res) {
 });
 
 app.get("/", async (req, res)=>{
-  const users = await db.query("SELECT * FROM USUARIOS")
-  console.log(users)
+  const salt = await bcrypt.genSalt(10);
+  const pass = await bcrypt.hash("123", salt)
+  console.log(pass);
+  console.log(await bcrypt.compare("123", pass))
 })
+
+//Routes
+app.use('/auth',require('./routes/auth.routes'));
 
 module.exports = app;
