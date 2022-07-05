@@ -1,35 +1,55 @@
 import db from "../database";
 
   export const getProductList = async (req, res) => {
-   const result = await db.query("SELECT * FROM PRODUCTOS")
-
+   const result = await db.query('SELECT * FROM PRODUCTOS')
       res.status(200).json(result);
+  }
+
+  export const productExist = async (barCode) => {
+    const result = await db.query('SELECT * FROM PRODUCTOS WHERE codigo_barras = ?', [barCode])
+    const foundProduct = result[0];
+    if(!foundProduct) return false;
+    return foundProduct;
   }
   
  export const createProduct = async (req, res) => {
     const {id, name, category, lab, price, unitSell, location, tax, barCode, minQuant, quant} = req.body;
-  
-    await db.query(
-      `INSERT INTO PRODUCTOS (idProductos, nombre, categoria, laboratorio, precio, unidad_venta, ubicacion,\
-       grabado_impuesto, codigo_barras, cantidad_minima, cantidad) values (?,?,?,?,?,?,?,?,?,?,?)`, 
+    const foundProduct = await productExist(barCode);
+    if(foundProduct){ res.status(409).json({message: 'Product already exists'});}
+    else{
+      await db.query(
+      'INSERT INTO PRODUCTOS (idProductos, nombre, categoria, laboratorio, precio, unidad_venta, ubicacion,\
+       grabado_impuesto, codigo_barras, cantidad_minima, cantidad) values (?,?,?,?,?,?,?,?,?,?,?)', 
        [id, name, category, lab, price, unitSell, location, tax, barCode, minQuant, quant]
     );
-    
-    res.sendStatus(201);
+    res.sendStatus(201); 
+      } 
   };
 
   export const getProductName = async (req, res) => {
-   const result = await db.query('SELECT * FROM PRODUCTOS WHERE nombre = ?', [req.body.name])
-   
+   const result = await db.query('SELECT * FROM PRODUCTOS WHERE nombre = ?', [req.body.name,])
    res.status(201).json(result);
   }
 
   export const getProductBar = async (req, res) => {
-    const result = await db.query('SELECT * FROM PRODUCTOS WHERE codigo_barras = ?', [req.body.codeBar])
-    res.status(201).json(result);
+    const result = await db.query('SELECT * FROM PRODUCTOS WHERE codigo_barras = ?', [req.body.barCode,])
+    res.status(200).json(result)
    }
 
   export const deleteProduct = async (req, res) => {
-    const result = await db.query('DELETE FROM PRODUCTOS WHERE codigo_barras = ?', [req.body.codeBar])
+    await db.query('DELETE FROM PRODUCTOS WHERE codigo_barras = ?', [req.body.barCode,])
     res.sendStatus(200)
+  }
+
+  export const updateProduct = async (req, res) => {
+    const {name, category, lab, price, unitSell, location, tax, barCode, minQuant, quant} = req.body;
+    const foundProduct = await productExist(barCode)
+    if(foundProduct){
+    await db.query('UPDATE PRODUCTOS SET nombre = ?, categoria = ?, laboratorio = ? , precio = ?, unidad_venta = ?, ubicacion = ?,\
+    grabado_impuesto = ?, cantidad_minima = ?, cantidad = ? WHERE codigo_barras = ?', 
+    [name, category, lab, price, unitSell, location, tax, minQuant, quant, barCode])
+    res.sendStatus(200)
+    }else{
+      res.status(404).json({message: 'Product not found'});
+    }
   }
