@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "ROLE=dev nodemon src/index.js --exec babel-node",
-    "start": "node src/index.js",
-    "build": "babel src --out-dir build",
+    "start": "node build/index.js",
     "test": "ROLE=test jest --verbose --silent --detectOpenHandles",
     "babel-node": "babel-node --presets='@babel/preset-env'"
   },
