@@ -27,7 +27,7 @@ import db from "../database";
   };
 
   export const getProductName = async (req, res) => {
-   const result = await db.query('SELECT * FROM PRODUCTOS WHERE nombre = ?', [req.body.name,])
+   const result = await db.query('SELECT * FROM PRODUCTOS WHERE INSTR(nombre, ?)', [req.body.name,])
    res.status(201).json(result);
   }
 
