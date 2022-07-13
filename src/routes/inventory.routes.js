@@ -8,5 +8,6 @@ router.post('/getProduct_name', controller.getProductName);
 router.post('/getProduct_bar', controller.getProductBar);
 router.post('/delete_product', controller.deleteProduct);
 router.post('/update_product', controller.updateProduct);
+router.post('/add_batch', controller.addBatch);
 
 module.exports = router
