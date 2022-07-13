@@ -10,12 +10,11 @@ export const productExist = async (barCode) => {
     "SELECT * FROM PRODUCTOS WHERE codigo_barras = ?",
     [barCode]
   );
-  const foundProduct = result[0];
-  if (!foundProduct) return false;
-  return foundProduct;
+  if (!result[0]) return false;
+  return result[0];
 };
 
-export const getProductName = async (req, res) => {
+export const searchByName = async (req, res) => {
   const result = await db.query(
     "SELECT * FROM PRODUCTOS WHERE LOCATE(?, nombre) > 0",
     [req.body.name]
@@ -62,19 +61,34 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const getProductBar = async (req, res) => {
+export const serachByBar = async (req, res) => {
   const result = await db.query(
     "SELECT * FROM PRODUCTOS WHERE codigo_barras = ?",
     [req.body.barCode]
   );
-  res.status(200).json(result);
+  if(result[0]) res.status(200).json(result);
+  else res.status(404).json({message: "Product not found"})
+};
+
+export const serachByCategory = async (req, res) => {
+  const result = await db.query(
+    "SELECT * FROM PRODUCTOS WHERE LOWER(categoria) = LOWER(?)",
+    [req.body.category]
+  );
+  if(result[0]) res.status(200).json(result);
+  else res.status(404).json({message: "Product not found"});
 };
 
 export const deleteProduct = async (req, res) => {
+  const foundProduct = await productExist(req.body.barCode)
+  if(foundProduct){
   await db.query("DELETE FROM PRODUCTOS WHERE codigo_barras = ?", [
     req.body.barCode,
   ]);
   res.sendStatus(200);
+  }else{
+    res.status(404).json({message: "Product not found"})
+  }
 };
 
 export const updateProduct = async (req, res) => {

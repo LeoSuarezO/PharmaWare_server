@@ -3,9 +3,10 @@ const router = express.Router();
 const controller = require('../controllers/inventory.controller')
 
 router.post('/create_product', controller.createProduct);
-router.get('/products',  controller.getProductList);
-router.post('/getProduct_name', controller.getProductName);
-router.post('/getProduct_bar', controller.getProductBar);
+router.get('/get_products',  controller.getProductList);
+router.post('/search_by_name', controller.searchByName);
+router.post('/search_by_bar', controller.serachByBar);
+router.post('/search_by_category', controller.serachByCategory);
 router.post('/delete_product', controller.deleteProduct);
 router.post('/update_product', controller.updateProduct);
 router.post('/add_batch', controller.addBatch);
