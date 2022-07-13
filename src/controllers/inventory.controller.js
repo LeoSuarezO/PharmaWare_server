@@ -15,11 +15,14 @@ export const productExist = async (barCode) => {
   return foundProduct;
 };
 
-<<<<<<< HEAD
-  export const getProductName = async (req, res) => {
-   const result = await db.query('SELECT * FROM PRODUCTOS WHERE LOCATE(?, nombre) > 0', [req.body.name,])
-   res.status(201).json(result);
-=======
+export const getProductName = async (req, res) => {
+  const result = await db.query(
+    "SELECT * FROM PRODUCTOS WHERE LOCATE(?, nombre) > 0",
+    [req.body.name]
+  );
+  res.status(201).json(result);
+};
+
 export const createProduct = async (req, res) => {
   const {
     id,
@@ -56,16 +59,7 @@ export const createProduct = async (req, res) => {
       ]
     );
     res.sendStatus(201);
->>>>>>> 3f86183e32826f6d47e54af9bfc8af485494776b
   }
-};
-
-export const getProductName = async (req, res) => {
-  const result = await db.query(
-    "SELECT * FROM PRODUCTOS WHERE INSTR(nombre, ?)",
-    [req.body.name]
-  );
-  res.status(201).json(result);
 };
 
 export const getProductBar = async (req, res) => {
@@ -126,16 +120,19 @@ export const addBatch = async (req, res) => {
     "SELECT id_producto, cantidad FROM PRODUCTOS WHERE codigo_barras = ?",
     [barCode]
   );
-  const foundProduct = await productExist(barCode)
+  const foundProduct = await productExist(barCode);
   if (foundProduct) {
     await db.query(
       "INSERT INTO LOTES (fecha_vencimiento,cantidad,id_producto,id_proveedor) VALUES (?,?,?,?)",
       [fecha_vencimiento, cantidad, result[0].id_producto, id_proveedor]
     );
 
-    let quantity = parseInt(result[0].cantidad) + parseInt(cantidad)
+    let quantity = parseInt(result[0].cantidad) + parseInt(cantidad);
 
-    await db.query('UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?',[quantity, result[0].id_producto])
+    await db.query("UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?", [
+      quantity,
+      result[0].id_producto,
+    ]);
     res.sendStatus(200);
   } else {
     res.status(404).json({ message: "Product not found" });
