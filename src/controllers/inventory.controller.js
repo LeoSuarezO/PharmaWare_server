@@ -117,7 +117,7 @@ export const updateProduct = async (req, res) => {
 export const addBatch = async (req, res) => {
   const { barCode, fecha_vencimiento, cantidad, id_proveedor } = req.body;
   const result = await db.query(
-    "SELECT id_producto FROM PRODUCTOS WHERE codigo_barras = ?",
+    "SELECT id_producto, cantidad FROM PRODUCTOS WHERE codigo_barras = ?",
     [barCode]
   );
   const foundProduct = await productExist(barCode)
@@ -126,6 +126,10 @@ export const addBatch = async (req, res) => {
       "INSERT INTO LOTES (fecha_vencimiento,cantidad,id_producto,id_proveedor) VALUES (?,?,?,?)",
       [fecha_vencimiento, cantidad, result[0].id_producto, id_proveedor]
     );
+
+    let quantity = parseInt(result[0].cantidad) + parseInt(cantidad)
+
+    await db.query('UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?',[quantity, result[0].id_producto])
     res.sendStatus(200);
   } else {
     res.status(404).json({ message: "Product not found" });
