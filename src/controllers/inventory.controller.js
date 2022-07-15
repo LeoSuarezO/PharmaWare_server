@@ -66,8 +66,8 @@ export const serachByBar = async (req, res) => {
     "SELECT * FROM PRODUCTOS WHERE codigo_barras = ?",
     [req.body.barCode]
   );
-  if(result[0]) res.status(200).json(result);
-  else res.status(404).json({message: "Product not found"})
+  if (result[0]) res.status(200).json(result);
+  else res.status(404).json({ message: "Product not found" });
 };
 
 export const serachByCategory = async (req, res) => {
@@ -75,19 +75,19 @@ export const serachByCategory = async (req, res) => {
     "SELECT * FROM PRODUCTOS WHERE LOWER(categoria) = LOWER(?)",
     [req.body.category]
   );
-  if(result[0]) res.status(200).json(result);
-  else res.status(404).json({message: "Product not found"});
+  if (result[0]) res.status(200).json(result);
+  else res.status(404).json({ message: "Product not found" });
 };
 
 export const deleteProduct = async (req, res) => {
-  const foundProduct = await productExist(req.body.barCode)
-  if(foundProduct){
-  await db.query("DELETE FROM PRODUCTOS WHERE codigo_barras = ?", [
-    req.body.barCode,
-  ]);
-  res.sendStatus(200);
-  }else{
-    res.status(404).json({message: "Product not found"})
+  const foundProduct = await productExist(req.body.barCode);
+  if (foundProduct) {
+    await db.query("DELETE FROM PRODUCTOS WHERE codigo_barras = ?", [
+      req.body.barCode,
+    ]);
+    res.sendStatus(200);
+  } else {
+    res.status(404).json({ message: "Product not found" });
   }
 };
 
@@ -148,6 +148,33 @@ export const addBatch = async (req, res) => {
       result[0].id_producto,
     ]);
     res.sendStatus(200);
+  } else {
+    res.status(404).json({ message: "Product not found" });
+  }
+};
+
+export const sales = async (req, res) => {
+  const { barCode, quant } = req.body;
+  const result = await db.query(
+    "SELECT id_producto, cantidad FROM PRODUCTOS WHERE codigo_barras = ?",
+    [barCode]
+  );
+  const foundProduct = await productExist(barCode);
+
+  if (foundProduct) {
+    let quantity = parseInt(result[0].cantidad) - parseInt(quant);
+    console.log(quantity);
+    if (quantity >= 0) {
+      db.query("UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?", [
+        quantity,
+        result[0].id_producto,
+      ]);
+      res.sendStatus(200);
+    } else {
+      res
+        .status(409)
+        .json({ message: "The sale exceeds the quantity available" });
+    }
   } else {
     res.status(404).json({ message: "Product not found" });
   }
