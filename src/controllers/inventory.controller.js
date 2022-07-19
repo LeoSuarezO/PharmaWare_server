@@ -154,28 +154,46 @@ export const addBatch = async (req, res) => {
 };
 
 export const sales = async (req, res) => {
-  const { barCode, quant } = req.body;
-  const result = await db.query(
-    "SELECT id_producto, cantidad FROM PRODUCTOS WHERE codigo_barras = ?",
-    [barCode]
-  );
-  const foundProduct = await productExist(barCode);
+  const { products } = req.body;
+  const last_sale = await createSale(req);
+  createItems(products, last_sale, res);
+};
 
-  if (foundProduct) {
-    let quantity = parseInt(result[0].cantidad) - parseInt(quant);
-    console.log(quantity);
+async function createSale(req) {
+  const { date, total, user, client } = req.body;
+  await db.query(
+    "INSERT INTO VENTAS (fecha, valor_total, id_usuario, id_cliente) VALUES (?,?,?,?)",
+    [date, total, user, client]
+  );
+
+  const last_id = await db.query("SELECT MAX(id_venta) AS sale FROM VENTAS");
+  return last_id[0].sale;
+}
+
+function createItems(products, sale, res) {
+  products.forEach(async (element) => {
+    const result = await db.query(
+      "SELECT id_producto, cantidad FROM PRODUCTOS WHERE id_producto = ?",
+      [element.product]
+    );
+
+    let quantity = parseInt(result[0].cantidad) - parseInt(element.quantity);
+
     if (quantity >= 0) {
-      db.query("UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?", [
-        quantity,
-        result[0].id_producto,
-      ]);
+      await db.query(
+        "INSERT INTO ITEM_VENTA(id_venta, id_producto, cantidad, valor_total) VALUES (?,?,?,?)",
+        [sale, element.product, element.quantity, element.total]
+      );
+
+      await db.query(
+        "UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?",
+        [quantity, result[0].id_producto]
+      );
       res.sendStatus(200);
     } else {
       res
         .status(409)
         .json({ message: "The sale exceeds the quantity available" });
     }
-  } else {
-    res.status(404).json({ message: "Product not found" });
-  }
-};
+  });
+}
