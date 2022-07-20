@@ -197,3 +197,22 @@ function createItems(products, sale, res) {
     }
   });
 }
+
+export const getPrice = async (req, res) => {
+  const result = await db.query(
+    "SELECT codigo_barras, precio FROM PRODUCTOS WHERE id_producto = ?",
+    [req.body.id_product]
+  );
+  const foundProduct = await productExist(result[0].codigo_barras);
+  if (foundProduct) res.status(200).json(parseInt(result[0].precio));
+  else res.sendStatus(400).json({ message: "Product not found" });
+};
+
+export const updatePrice = async (req, res) => {
+  const { id_product, price } = req.body;
+  await db.query("UPDATE PRODUCTOS SET precio = ? WHERE id_producto = ?", [
+    price,
+    id_product,
+  ]);
+  res.sendStatus(200);
+};

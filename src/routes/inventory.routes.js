@@ -11,5 +11,7 @@ router.post('/delete_product', controller.deleteProduct);
 router.post('/update_product', controller.updateProduct);
 router.post('/add_batch', controller.addBatch);
 router.post('/sale', controller.sales);
+router.post('/get_price', controller.getPrice);
+router.post('/update_price', controller.updatePrice);
 
 module.exports = router
