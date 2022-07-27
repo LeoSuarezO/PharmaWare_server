@@ -1,7 +1,7 @@
 import db from "../database";
 
 export const getProductList = async (req, res) => {
-  const result = await db.query("SELECT * FROM PRODUCTOS");
+  const result = await db.query("SELECT * FROM VENTAS");
   res.status(200).json(result);
 };
 
@@ -216,3 +216,12 @@ export const updatePrice = async (req, res) => {
   ]);
   res.sendStatus(200);
 };
+
+export const getReceipt = async (req, res) => {
+  const result = await db.query(
+    "SELECT * FROM VENTAS WHERE fecha = date_format(?, '%Y-%m-%d')",
+    [req.body.date]
+  );
+  res.json(result);
+};
+

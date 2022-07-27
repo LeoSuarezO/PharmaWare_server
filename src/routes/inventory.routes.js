@@ -13,5 +13,6 @@ router.post('/add_batch', controller.addBatch);
 router.post('/sale', controller.sales);
 router.post('/get_price', controller.getPrice);
 router.post('/update_price', controller.updatePrice);
+router.post('/get_receipt', controller.getReceipt);
 
 module.exports = router
