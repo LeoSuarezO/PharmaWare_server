@@ -15,5 +15,6 @@ router.post("/sale", [verifyToken], controller.sales);
 router.post("/get_price", controller.getPrice);
 router.post("/update_price", controller.updatePrice);
 router.post("/get_receipt", controller.getReceipt);
+router.post("/get_item_sale", controller.getItemSale);
 
 module.exports = router;

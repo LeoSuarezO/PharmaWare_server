@@ -221,3 +221,17 @@ export const getReceipt = async (req, res) => {
   res.json(result);
 };
 
+export const getItemSale = async (req, res) => {
+   const result = await db.query(
+    "SELECT V.id_venta, P.nombre, I.id_producto, I.cantidad, I.valor_total FROM VENTAS V, ITEM_VENTA I, PRODUCTOS P WHERE I.id_venta = V.id_venta AND V.id_venta = ? AND P.id_producto = I.id_producto",
+  [req.body.saleId]);
+  res.json(result);
+};
+
+export const getName = async (productId) => {
+  const result = db.query(
+    "SELECT nombre FROM PRODUCTOS WHERE id_producto = ?",
+    [productId]
+  );
+  return result;
+};
