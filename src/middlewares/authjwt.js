@@ -5,11 +5,14 @@ const db = require("../database");
 export const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers["x-access-token"];
-
+    let user;
     if (!token) return res.status(403).json({ message: "No token provided" });
     const decoded = jwt.verify(token, config.SECRET);
-    req.userId = decoded.id;
-    const user = User.findById(req.userId);
+    req.id_usuario = decoded.id;
+    const query = await db.query(
+      `SELECT * FROM USUARIOS WHERE USUARIOS.id_usuario = ${req.id_usuario}`
+      );
+    user = query[0];
     if (!user) return res.status(404).json({ message: "User not found" });
 
     next();
