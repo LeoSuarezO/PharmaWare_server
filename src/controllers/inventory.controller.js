@@ -189,13 +189,9 @@ function createItems(products, sale, res) {
         "UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?",
         [quantity, result[0].id_producto]
       );
-      res.sendStatus(200);
-    } else {
-      res
-        .status(409)
-        .json({ message: "The sale exceeds the quantity available" });
     }
   });
+  res.sendStatus(200);
 }
 
 export const getPrice = async (req, res) => {
