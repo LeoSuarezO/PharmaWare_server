@@ -1,7 +1,7 @@
 import db from "../database";
 
 export const getProductList = async (req, res) => {
-  const result = await db.query("SELECT * FROM VENTAS");
+  const result = await db.query("SELECT * FROM PRODUCTOS");
   res.status(200).json(result);
 };
 
