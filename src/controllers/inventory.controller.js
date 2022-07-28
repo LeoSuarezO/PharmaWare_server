@@ -235,3 +235,8 @@ export const getName = async (productId) => {
   );
   return result;
 };
+
+export const getInfoProduct = async (req, res) => {
+  const result = db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
+  res.sendStatus(200).json(result);
+}
