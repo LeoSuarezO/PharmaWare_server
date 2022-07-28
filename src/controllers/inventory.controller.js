@@ -218,7 +218,7 @@ export const getReceipt = async (req, res) => {
     "SELECT * FROM VENTAS WHERE fecha = date_format(?, '%Y-%m-%d')",
     [req.body.date]
   );
-  res.json(result);
+  res.status(200).json(result);
 };
 
 export const getItemSale = async (req, res) => {
@@ -238,6 +238,6 @@ export const getName = async (productId) => {
 
 export const getInfoProduct = async (req, res) => {
   const result = await db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
-  if (result[0]) res.sendStatus(200).json(result);
-  else res.sendStatus(404).json({message: "Product not found"});
+  if (result[0]) res.status(200).json(result);
+  else res.status(404).json({message: "Product not found"});
 }
