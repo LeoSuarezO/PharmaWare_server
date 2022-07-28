@@ -237,6 +237,7 @@ export const getName = async (productId) => {
 };
 
 export const getInfoProduct = async (req, res) => {
-  const result = db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
-  res.sendStatus(200).json(result);
+  const result = await db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
+  if (result[0]) res.sendStatus(200).json(result);
+  else res.sendStatus(404).json({message: "Product not found"});
 }
