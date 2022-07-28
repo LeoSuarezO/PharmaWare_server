@@ -251,5 +251,15 @@ export const createSupplier = async (req, res) => {
     await db.query("INSERT INTO PROVEEDORES (nombre) VALUES (?)", [name]);
     res.sendStatus(200);
   }
-  
+}
+
+export const getSupplier = async (req, res) => {
+  const result = await db.query("SELECT id_proveedor, nombre FROM PROVEEDORES");
+  res.status(200).json(result);
+}
+
+export const getBatch = async (req, res) => {
+  const result = await db.query ("SELECT * FROM LOTES WHERE id_producto = ?", [req.body.idProduct]);
+  if(result[0]) res.status(200).json(result);
+  else res.status(404).json({message: "Product not found"});
 }
