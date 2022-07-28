@@ -17,5 +17,6 @@ router.post("/update_price", controller.updatePrice);
 router.post("/get_receipt", controller.getReceipt);
 router.post("/get_item_sale", controller.getItemSale);
 router.post("/get_info_product", controller.getInfoProduct);
+router.post("/create_supplier", controller.createSupplier);
 
 module.exports = router;

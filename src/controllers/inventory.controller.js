@@ -1,7 +1,7 @@
 import db from "../database";
 
 export const getProductList = async (req, res) => {
-  const result = await db.query("SELECT * FROM PRODUCTOS");
+  const result = await db.query("SELECT * FROM PROVEEDORES");
   res.status(200).json(result);
 };
 
@@ -240,4 +240,16 @@ export const getInfoProduct = async (req, res) => {
   const result = await db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
   if (result[0]) res.status(200).json(result);
   else res.status(404).json({message: "Product not found"});
+}
+
+export const createSupplier = async (req, res) => {
+  const name = req.body.name;
+  const result = await db.query("SELECT id_proveedor FROM PROVEEDORES WHERE LOWER(nombre) = LOWER(?)", [name]);
+  if(result[0]) {
+    res.status(409).json({ message: "Supplier already exists" });
+  }else{
+    await db.query("INSERT INTO PROVEEDORES (nombre) VALUES (?)", [name]);
+    res.sendStatus(200);
+  }
+  
 }
