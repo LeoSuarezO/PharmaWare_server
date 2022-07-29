@@ -14,7 +14,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     let foundUser = await findUser(req, res);
     if(foundUser) {
-        const token = jwt.sign({id: foundUser.username}, config.SECRET, {
+        const token = jwt.sign({id: foundUser.id_usuario}, config.SECRET, {
             expiresIn: 86400
         })
         res.status(200).json({token: token, rol: foundUser.tipo_usuario});
