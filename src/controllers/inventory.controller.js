@@ -222,9 +222,10 @@ export const getReceipt = async (req, res) => {
 };
 
 export const getItemSale = async (req, res) => {
-   const result = await db.query(
+  const result = await db.query(
     "SELECT V.id_venta, P.nombre, I.id_producto, I.cantidad, I.valor_total FROM VENTAS V, ITEM_VENTA I, PRODUCTOS P WHERE I.id_venta = V.id_venta AND V.id_venta = ? AND P.id_producto = I.id_producto",
-  [req.body.saleId]);
+    [req.body.saleId]
+  );
   res.json(result);
 };
 
@@ -237,29 +238,45 @@ export const getName = async (productId) => {
 };
 
 export const getInfoProduct = async (req, res) => {
-  const result = await db.query("SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",[req.body.id_product]);
+  const result = await db.query(
+    "SELECT nombre, precio, unidad_venta, ubicacion FROM PRODUCTOS WHERE id_producto = ?",
+    [req.body.id_product]
+  );
   if (result[0]) res.status(200).json(result);
-  else res.status(404).json({message: "Product not found"});
-}
+  else res.status(404).json({ message: "Product not found" });
+};
 
 export const createSupplier = async (req, res) => {
   const name = req.body.name;
-  const result = await db.query("SELECT id_proveedor FROM PROVEEDORES WHERE LOWER(nombre) = LOWER(?)", [name]);
-  if(result[0]) {
+  const result = await db.query(
+    "SELECT id_proveedor FROM PROVEEDORES WHERE LOWER(nombre) = LOWER(?)",
+    [name]
+  );
+  if (result[0]) {
     res.status(409).json({ message: "Supplier already exists" });
-  }else{
+  } else {
     await db.query("INSERT INTO PROVEEDORES (nombre) VALUES (?)", [name]);
     res.sendStatus(200);
   }
-}
+};
 
 export const getSupplier = async (req, res) => {
   const result = await db.query("SELECT id_proveedor, nombre FROM PROVEEDORES");
   res.status(200).json(result);
-}
+};
 
 export const getBatch = async (req, res) => {
-  const result = await db.query ("SELECT * FROM LOTES WHERE id_producto = ?", [req.body.idProduct]);
-  if(result[0]) res.status(200).json(result);
-  else res.status(404).json({message: "Product not found"});
-}
+  const result = await db.query("SELECT * FROM LOTES WHERE id_producto = ?", [
+    req.body.idProduct,
+  ]);
+  if (result[0]) res.status(200).json(result);
+  else res.status(404).json({ message: "Product not found" });
+};
+
+export const deleteBatch = async (req, res) => {
+  const result = await db.query("DELETE FROM LOTES WHERE id_lote = ?;", [
+    req.body.idProduct,
+  ]);
+  if (result.affectedRows > 0) res.status(200).json({message: "Batch has been removed"});
+  else res.status(404).json({ message: "Batch not found" });
+};

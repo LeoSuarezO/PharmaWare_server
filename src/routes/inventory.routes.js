@@ -20,5 +20,6 @@ router.post("/get_info_product", controller.getInfoProduct);
 router.post("/create_supplier", controller.createSupplier);
 router.get("/get_supplier", controller.getSupplier);
 router.post("/get_batch", controller.getBatch);
+router.post("/remove_batch", controller.deleteBatch);
 
 module.exports = router;
