@@ -161,6 +161,7 @@ export const sales = async (req, res) => {
 
 async function createSale(req) {
   const { date, total, user, client } = req.body;
+  console.log("fecha que ingresa: "+req.body.date);
   await db.query(
     "INSERT INTO VENTAS (fecha, valor_total, id_usuario, id_cliente) VALUES (?,?,?,?)",
     [date, total, user, client]
