@@ -281,3 +281,9 @@ export const deleteBatch = async (req, res) => {
   if (result.affectedRows > 0) res.status(200).json({message: "Batch has been removed"});
   else res.status(404).json({ message: "Batch not found" });
 };
+
+export const updateQuantity = async (req, res) => {
+  await db.query("UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?" [quantity, id_product]);
+  res.status(200);
+}
+

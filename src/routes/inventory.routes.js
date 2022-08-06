@@ -21,5 +21,6 @@ router.post("/create_supplier", controller.createSupplier);
 router.get("/get_supplier", controller.getSupplier);
 router.post("/get_batch", controller.getBatch);
 router.post("/remove_batch", controller.deleteBatch);
+router.post("/update_quantity", controller.updateQuantity);
 
 module.exports = router;

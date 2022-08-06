@@ -16,5 +16,6 @@ app.use(morgan("dev"));
 app.use('/auth',require('./routes/auth.routes'));
 app.use('/inventory', require('./routes/inventory.routes'));
 app.use('/report', require('./routes/report.routes'));
+app.use('/formats', require('./routes/formats.routes'));
 
 module.exports = app;
