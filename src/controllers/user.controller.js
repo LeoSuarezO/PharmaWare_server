@@ -7,8 +7,8 @@ export const createUser = async (req, res) => {
     "INSERT INTO `USUARIOS` (`nombre`, `contrasenia`, `tipo_usuario`) VALUES (?,?,?)",
     [username, await encryptPass(password), role]
   )
-
-  return username
+  res.status(200).json({message: "User was created succesfuly"});
+  return username;
 };
 
 export const findUser = async (req, res) => {

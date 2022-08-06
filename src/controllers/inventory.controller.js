@@ -283,7 +283,8 @@ export const deleteBatch = async (req, res) => {
 };
 
 export const updateQuantity = async (req, res) => {
-  await db.query("UPDATE PRODUCTOS SET cantidad = ? WHERE id_producto = ?" [quantity, id_product]);
-  res.status(200);
+  const {id_product, quantity} = req.body;
+  await db.query("UPDATE PRODUCTOS SET cantidad = cantidad+? WHERE id_producto = ?", [quantity, id_product]);
+  res.sendStatus(200);
 }
 

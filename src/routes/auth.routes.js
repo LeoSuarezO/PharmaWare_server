@@ -8,4 +8,5 @@ router.post("/login", controller.login);
 
 router.post("/register", [verifyReg.checkExist], controller.register);
 
+
 module.exports = router;

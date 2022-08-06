@@ -17,5 +17,6 @@ app.use('/auth',require('./routes/auth.routes'));
 app.use('/inventory', require('./routes/inventory.routes'));
 app.use('/report', require('./routes/report.routes'));
 app.use('/formats', require('./routes/formats.routes'));
+app.use('/user', require('./routes/user.routes'));
 
 module.exports = app;
