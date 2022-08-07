@@ -7,6 +7,15 @@ export const createUser = async (req, res) => {
     "INSERT INTO `USUARIOS` (`nombre`, `contrasenia`, `tipo_usuario`) VALUES (?,?,?)",
     [username, await encryptPass(password), role]
   )
+  return username;
+};
+
+export const createUserA = async (req, res) => {
+  const { username, password, role } = req.body;
+  await db.query(
+    "INSERT INTO `USUARIOS` (`nombre`, `contrasenia`, `tipo_usuario`) VALUES (?,?,?)",
+    [username, await encryptPass(password), role]
+  )
   res.status(200).json({message: "User was created succesfuly"});
   return username;
 };
