@@ -22,7 +22,7 @@ export const verifyToken = async (req, res, next) => {
   }
 };
 
-export const idAdmin = async (req, res, next) => {
+export const isAdmin = async (req, res, next) => {
     let user;
     const query = await db.query(
       `SELECT * FROM USUARIOS WHERE USUARIOS.id_usuario = ${req.userId}`

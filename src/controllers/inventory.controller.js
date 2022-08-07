@@ -161,7 +161,7 @@ export const sales = async (req, res) => {
 
 async function createSale(req) {
   const { date, total, user, client } = req.body;
-  console.log("fecha que ingresa: "+req.body.date);
+  console.log("fecha que ingresa: " + req.body.date);
   await db.query(
     "INSERT INTO VENTAS (fecha, valor_total, id_usuario, id_cliente) VALUES (?,?,?,?)",
     [date, total, user, client]
@@ -278,13 +278,16 @@ export const deleteBatch = async (req, res) => {
   const result = await db.query("DELETE FROM LOTES WHERE id_lote = ?;", [
     req.body.idProduct,
   ]);
-  if (result.affectedRows > 0) res.status(200).json({message: "Batch has been removed"});
+  if (result.affectedRows > 0)
+    res.status(200).json({ message: "Batch has been removed" });
   else res.status(404).json({ message: "Batch not found" });
 };
 
 export const updateQuantity = async (req, res) => {
-  const {id_product, quantity} = req.body;
-  await db.query("UPDATE PRODUCTOS SET cantidad = cantidad+? WHERE id_producto = ?", [quantity, id_product]);
+  const { id_product, quantity } = req.body;
+  await db.query(
+    "UPDATE PRODUCTOS SET cantidad = cantidad+? WHERE id_producto = ?",
+    [quantity, id_product]
+  );
   res.sendStatus(200);
-}
-
+};
