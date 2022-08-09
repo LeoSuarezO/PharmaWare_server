@@ -6,18 +6,24 @@ export const createUser = async (req, res) => {
   await db.query(
     "INSERT INTO `USUARIOS` (`nombre`, `contrasenia`, `tipo_usuario`) VALUES (?,?,?)",
     [username, await encryptPass(password), role]
-  )
+  );
   return username;
 };
 
 export const userCreate = async (req, res) => {
   const { username, password, role } = req.body;
-  await db.query(
-    "INSERT INTO `USUARIOS` (`nombre`, `contrasenia`, `tipo_usuario`) VALUES (?,?,?)",
-    [username, await encryptPass(password), role]
-  )
-  res.status(200).json({message: "User was created succesfuly"});
-}
+  const founduser = await userExists(username);
+  if (!founduser) {
+    console.log("usuario nuevo");
+    await db.query(
+      "INSERT INTO USUARIOS (nombre, contrasenia, tipo_usuario) VALUES (?,?,?)",
+      [username, await encryptPass(password), role]
+    );
+    res.status(200).json({ message: "User was created succesfuly" });
+  } else {
+    res.status(400).json({ message: "The User already exist" });
+  }
+};
 
 export const findUser = async (req, res) => {
   const result = await db.query("SELECT * FROM USUARIOS WHERE nombre = ?", [
@@ -60,4 +66,12 @@ export const editUser = async (req, res) => {
     new: true,
   });
   res.status(201).json(user);
+};
+
+export const userExists = async (name) => {
+  const result = await db.query("SELECT * FROM USUARIOS WHERE nombre = ?", [
+    name,
+  ]);
+  if (!result[0]) return false;
+  return result[0];
 };

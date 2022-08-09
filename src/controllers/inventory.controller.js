@@ -1,7 +1,10 @@
+import { contentSecurityPolicy } from "helmet";
 import db from "../database";
 
 export const getProductList = async (req, res) => {
   const result = await db.query("SELECT * FROM PRODUCTOS");
+  const users = await db.query("SELECT nombre FROM USUARIOS");
+  console.log(users);
   res.status(200).json(result);
 };
 
