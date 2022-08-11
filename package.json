@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ROLE=dev nodemon src/index.js --exec babel-node",
     "start": "node build/index.js",
-    "test": "ROLE=test jest --verbose --silent --detectOpenHandles",
+    "test": "ROLE=test jest --verbose --silent --forceExit",
     "babel-node": "babel-node --presets='@babel/preset-env'"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/LeoSuarezO/serverapp-ppdsa#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
