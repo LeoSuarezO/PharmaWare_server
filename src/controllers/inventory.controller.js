@@ -3,7 +3,6 @@ import db from "../database";
 
 export const getProductList = async (req, res) => {
   const result = await db.query("SELECT * FROM PRODUCTOS");
-  console.log(users);
   res.status(200).json(result);
 };
 
