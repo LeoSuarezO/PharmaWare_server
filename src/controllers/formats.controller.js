@@ -14,6 +14,16 @@ export const tempAndHumidity = async (req, res) => {
   res.sendStatus(200);
 };
 
+export const getFormatTempHum = async (req, res) => {
+  const { initDate, endDate } = req.body;
+
+  const result = await db.query(
+    "SELECT * FROM REGIST_TEMP_HUMED WHERE date >= ? AND date < ?",
+    [initDate, endDate]
+  );
+  res.status(200).json(result);
+};
+
 // export const createFormat = async (name, user) =>{
 //     await db.query ("INSERT INTO FORMATOS(id_formato, nombre, id_usuario), VALUES (1, ?, ?)", [name, user]);
 //     // const result = await db.query("SELECT id_formato"

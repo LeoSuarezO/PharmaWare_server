@@ -38,29 +38,30 @@ export const createProduct = async (req, res) => {
     minQuant,
     quant,
   } = req.body;
-  const foundProduct = await productExist(barCode);
-  if (foundProduct) {
-    res.status(409).json({ message: "Product already exists" });
-  } else {
-    await db.query(
-      "INSERT INTO PRODUCTOS (id_producto, nombre, categoria, laboratorio, precio, unidad_venta, ubicacion,\
+    console.log("Product with barCode");
+    const foundProduct = await productExist(req.body.barCode);
+    if (foundProduct) {
+      res.status(409).json({ message: "Product already exists" });
+    } else {
+      await db.query(
+        "INSERT INTO PRODUCTOS (id_producto, nombre, categoria, laboratorio, precio, unidad_venta, ubicacion,\
        grabado_impuesto, codigo_barras, cantidad_minima, cantidad) values (?,?,?,?,?,?,?,?,?,?,?)",
-      [
-        id,
-        name,
-        category,
-        lab,
-        price,
-        unitSell,
-        location,
-        tax,
-        barCode,
-        minQuant,
-        quant,
-      ]
-    );
-    res.sendStatus(201);
-  }
+        [
+          id,
+          name,
+          category,
+          lab,
+          price,
+          unitSell, 
+          location,
+          tax,
+          barCode,
+          minQuant,
+          quant,
+        ]
+      );
+      res.sendStatus(201);
+    }
 };
 
 export const serachByBar = async (req, res) => {
