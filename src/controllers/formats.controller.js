@@ -21,7 +21,7 @@ export const getFormatTempHum = async (req, res) => {
   const { initDate, endDate } = req.body;
 
   const result = await db.query(
-    "SELECT * FROM REGIST_TEMP_HUMED WHERE fecha >= CAST(? AS DATE) AND fecha < CAST(? AS DATE)",
+    "SELECT * FROM REGIST_TEMP_HUMED WHERE fecha >= CAST(? AS DATE) AND fecha <= CAST(? AS DATE)",
     [initDate, endDate]
   );
   res.status(200).json(result);
