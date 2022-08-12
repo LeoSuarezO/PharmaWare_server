@@ -2,11 +2,19 @@ import db from "../database";
 
 export const tempAndHumidity = async (req, res) => {
   const { temperature, humidity, date } = req.body;
-  await db.query(
-    "INSERT INTO REGIST_TEMP_HUMED(temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, 1)",
-    [temperature, humidity, date]
+  const result = await db.query(
+    "SELECT * FROM REGIST_TEMP_HUMED WHERE fecha = CAST(? AS DATE)",
+    [date]
   );
-  res.sendStatus(200);
+  if (!result[0]) {
+    await db.query(
+      "INSERT INTO REGIST_TEMP_HUMED(temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, 1)",
+      [temperature, humidity, date]
+    );
+    res.sendStatus(200);
+  }else{
+    res.status(400).json({message: "The daily form has already been completed"})
+  }
 };
 
 export const getFormatTempHum = async (req, res) => {
