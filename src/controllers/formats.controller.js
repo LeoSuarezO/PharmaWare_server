@@ -2,14 +2,9 @@ import db from "../database";
 
 export const tempAndHumidity = async (req, res) => {
   const { temperature, humidity, date } = req.body;
-  const get_id = await db.query(
-    "SELECT MAX(id_regis_tem_humed) AS id FROM REGIST_TEMP_HUMED"
-  );
-  const id = parseInt(get_id[0].id) + 1;
-  console.log(id);
   await db.query(
-    "INSERT INTO REGIST_TEMP_HUMED(id_regis_tem_humed, temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, ?, 1)",
-    [id, temperature, humidity, date]
+    "INSERT INTO REGIST_TEMP_HUMED(temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, ?, 1)",
+    [temperature, humidity, date]
   );
   res.sendStatus(200);
 };
