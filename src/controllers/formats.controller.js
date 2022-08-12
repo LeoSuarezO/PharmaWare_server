@@ -3,7 +3,7 @@ import db from "../database";
 export const tempAndHumidity = async (req, res) => {
   const { temperature, humidity, date } = req.body;
   await db.query(
-    "INSERT INTO REGIST_TEMP_HUMED(temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, ?, 1)",
+    "INSERT INTO REGIST_TEMP_HUMED(temperatura, humedad, fecha, id_formato) VALUES (?, ?, ?, 1)",
     [temperature, humidity, date]
   );
   res.sendStatus(200);
